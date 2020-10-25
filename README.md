@@ -1,6 +1,7 @@
 # AopsDownloader
 
-Downloads transcripts and homework of AoPS classes
+Downloads transcripts and homework of AoPS classes.
+
 Packaged binaries are avilable at https://github.com/ling1729/AopsDownloader/releases/
 
 ## How to run:
