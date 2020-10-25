@@ -122,9 +122,3 @@ function askQuestion(query) {
         resolve(ans);
     }))
 }
-
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
