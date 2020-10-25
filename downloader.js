@@ -48,8 +48,9 @@ const puppeteer = require('puppeteer-core');
     await waitForNetworkIdle(page, 500, 0);
   }
 
-  console.log("Logged in successfully");
   await sleep(1000);
+  console.log("Logged in successfully");
+  await sleep(2000);
 
   // Save transcripts
   if(saveTranscripts == "yes"){
