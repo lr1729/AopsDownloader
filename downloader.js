@@ -14,7 +14,8 @@ const puppeteer = require('puppeteer-core');
     installPath: `${tmp}/.local-chromium`})
 
   const browser = await puppeteer.launch({
-    executablePath: exec
+    executablePath: exec,
+    headless: false
   });
 
   const page = await browser.newPage();
@@ -23,10 +24,8 @@ const puppeteer = require('puppeteer-core');
   var classURL = await askQuestion("Paste the url of your class (e.g. https://artofproblemsolving.com/class/2156-calculus)\n");
   if(classURL.slice(-1) == "/")
     classURL = classURL.slice(0, -1);
-  await page.goto(classURL, {waitUntil: 'networkidle2'});
+  await page.goto(classURL, {waitUntil: 'networkidle0'});
   var saveTranscripts = await askQuestion("Save transcripts? (yes/no)\n");
-  if(saveTranscripts == "yes")
-  var transcriptURL = await askQuestion("Paste the url of the first week's transcript (e.g. https://artofproblemsolving.com/class/2156-calculus/transcript/31402)\n");
   var saveHomework = await askQuestion("Save homework? (yes/no)\n");
   var weeks = await askQuestion("How many weeks to save?\n");
 
@@ -36,7 +35,7 @@ const puppeteer = require('puppeteer-core');
   var password = await askQuestion("Enter your password\n");
   await page.type('#login-password', password);
   await page.click('#login-button');
-  await sleep(1000);
+  await waitForNetworkIdle(page, 500, 0);
   while(await page.evaluate('document.querySelector(".error")') !== null && await page.evaluate('document.querySelector(".error").getAttribute("style") !== null')){
     console.log("Login failed");
     var username = await askQuestion("Please enter your username\n");
@@ -46,20 +45,19 @@ const puppeteer = require('puppeteer-core');
     await page.click('#login-password', {clickCount: 3})
     await page.type('#login-password', password);
     await page.click('#login-button');
-    await sleep(1000);
+    await waitForNetworkIdle(page, 500, 0);
   }
   console.log("Logged in successfully");
 
   // Save transcripts
   if(saveTranscripts == "yes"){
-    if(transcriptURL.slice(-1) == "/")
-      transcriptURL = transcriptURL.slice(0, -1);
-    var transcriptNum = parseInt(transcriptURL.split('/')[transcriptURL.split('/').length - 1]);
     console.log("Saving transcripts");
+    var transcriptURL = await page.evaluate("document.evaluate(\"//span[text()='Week 1']\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.parentElement.href");
+    var transcriptNum = parseInt(transcriptURL.split('/')[transcriptURL.split('/').length - 1]);
     for(let i = 1; i < parseInt(weeks) + 1; i++){
       let transcript = classURL + '/transcript/' + (transcriptNum + i - 1);
       console.log(`Loading transcript for week ${i}`);
-      await page.goto(transcript, {waitUntil: 'networkidle2'});
+      await page.goto(transcript, {waitUntil: 'networkidle0'});
       console.log(`Saving transcript for week ${i}`);
       await page.pdf({path: `week${i}-transcript.pdf`, format: 'A4'});
     }
@@ -71,7 +69,7 @@ const puppeteer = require('puppeteer-core');
     for(let i = 1; i < parseInt(weeks) + 1; i++){
       let homework = classURL + `/homework/${i}`
       console.log(`Loading homework for week ${i}`);
-      await page.goto(homework, {waitUntil: 'networkidle2'});
+      await page.goto(homework, {waitUntil: 'networkidle0'});
       console.log(`Saving homework for week ${i}`);
       await page.pdf({path: `week${i}-homework.pdf`, format: 'A4'});
     }
@@ -79,6 +77,39 @@ const puppeteer = require('puppeteer-core');
 
   await browser.close();
 })();
+
+function waitForNetworkIdle(page, timeout, maxInflightRequests = 0) {
+  page.on('request', onRequestStarted);
+  page.on('requestfinished', onRequestFinished);
+  page.on('requestfailed', onRequestFinished);
+
+  let inflight = 0;
+  let fulfill;
+  let promise = new Promise(x => fulfill = x);
+  let timeoutId = setTimeout(onTimeoutDone, timeout);
+  return promise;
+
+  function onTimeoutDone() {
+    page.removeListener('request', onRequestStarted);
+    page.removeListener('requestfinished', onRequestFinished);
+    page.removeListener('requestfailed', onRequestFinished);
+    fulfill();
+  }
+
+  function onRequestStarted() {
+    ++inflight;
+    if (inflight > maxInflightRequests)
+      clearTimeout(timeoutId);
+  }
+  
+  function onRequestFinished() {
+    if (inflight === 0)
+      return;
+    --inflight;
+    if (inflight === maxInflightRequests)
+      timeoutId = setTimeout(onTimeoutDone, timeout);
+  }
+}
 
 function askQuestion(query) {
     const rl = readline.createInterface({
