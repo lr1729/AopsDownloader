@@ -22,7 +22,7 @@ const readline = require('readline');
   if(saveTranscripts == "yes"){
     console.log("Saving transcripts");
     for(let i = 1; i < weeks + 1; i++){
-      let transcript = 'https://artofproblemsolving.com/class/2156-calculus/transcript/' + (transcriptNum + i - 1);
+      let transcript = url + '/transcript/' + (transcriptNum + i - 1);
       console.log(`Loading transcript for week ${i}`);
       await page.goto(transcript, {waitUntil: 'networkidle2'});
       console.log(`Saving transcript for week ${i}`);
@@ -33,7 +33,7 @@ const readline = require('readline');
   if(saveHomework == "yes"){
     console.log("Saving homework");
     for(let i = 1; i < weeks + 1; i++){
-      let homework = 'https://artofproblemsolving.com/class/2156-calculus/homework/${i}'
+      let homework = url + '/homework/${i}'
       console.log(`Loading homework for week ${i}`);
       await page.goto(homework, {waitUntil: 'networkidle2'});
       console.log(`Saving homework for week ${i}`);
