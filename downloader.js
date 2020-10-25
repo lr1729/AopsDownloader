@@ -2,7 +2,7 @@ const readline = require('readline');
 const puppeteer = require('puppeteer-core');
 
 (async () => {
-  console.log("Downloading resources (This may take a minute)");
+  console.log("Downloading resources (This may take a few minutes)");
 
   // Workround for pkg + puppet https://github.com/vercel/pkg/issues/204#issuecomment-529314210
   const download = require('download-chromium');
@@ -14,8 +14,7 @@ const puppeteer = require('puppeteer-core');
     installPath: `${tmp}/.local-chromium`})
 
   const browser = await puppeteer.launch({
-    executablePath: exec,
-    headless: false
+    executablePath: exec
   });
 
   const page = await browser.newPage();
