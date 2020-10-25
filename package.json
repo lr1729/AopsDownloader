@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/ling1729/aopsscraper#readme",
   "dependencies": {
-    "puppeteer": "^5.4.0"
+    "download-chromium": "^2.2.1",
+    "puppeteer-core": "^5.4.0"
   }
 }
