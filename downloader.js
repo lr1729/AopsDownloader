@@ -25,17 +25,16 @@ const puppeteer = require('puppeteer-core');
   if(classURL.slice(-1) == "/")
     classURL = classURL.slice(0, -1);
   await page.goto(classURL, {waitUntil: 'networkidle2'});
-  console.log(await page.evaluate('document.querySelector(".error").getAttribute("style") === null'));
   var saveTranscripts = await askQuestion("Save transcripts? (yes/no) ");
   if(saveTranscripts == "yes")
-  var transcriptURL = await askQuestion("Paste the url of the first week's transcript ");
+  var transcriptURL = await askQuestion("Paste the url of the first week's transcript (e.g. https://artofproblemsolving.com/class/2156-calculus/transcript/31402) ");
   var saveHomework = await askQuestion("Save homework? (yes/no) ");
   var weeks = await askQuestion("How many weeks to save? ");
 
   // Login
-  var username = await askQuestion("Please enter your username ");
+  var username = await askQuestion("Enter your username ");
   await page.type('#login-username', username);
-  var password = await askQuestion("Please enter your password ");
+  var password = await askQuestion("Enter your password ");
   await page.type('#login-password', password);
   await page.click('#login-button');
   await sleep(1000);
