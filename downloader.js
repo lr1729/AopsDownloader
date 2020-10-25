@@ -47,7 +47,9 @@ const puppeteer = require('puppeteer-core');
     await page.click('#login-button');
     await waitForNetworkIdle(page, 500, 0);
   }
+
   console.log("Logged in successfully");
+  await sleep(1000);
 
   // Save transcripts
   if(saveTranscripts == "yes"){
@@ -121,4 +123,10 @@ function askQuestion(query) {
         rl.close();
         resolve(ans);
     }))
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
