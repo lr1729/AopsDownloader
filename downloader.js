@@ -39,7 +39,7 @@ const puppeteer = require('puppeteer-core');
   await page.waitForNavigation({waitUntil: 'networkidle0'});
   if(saveTranscripts == "yes"){
     console.log("Saving transcripts");
-    for(let i = 1; i < weeks + 1; i++){
+    for(let i = 1; i < parseInt(weeks) + 1; i++){
       let transcript = classURL + '/transcript/' + (transcriptNum + i - 1);
       console.log(`Loading transcript for week ${i}`);
       await page.goto(transcript, {waitUntil: 'networkidle2'});
@@ -50,7 +50,7 @@ const puppeteer = require('puppeteer-core');
 
   if(saveHomework == "yes"){
     console.log("Saving homework");
-    for(let i = 1; i < weeks + 1; i++){
+    for(let i = 1; i < parseInt(weeks) + 1; i++){
       let homework = classURL + '/homework/${i}'
       console.log(`Loading homework for week ${i}`);
       await page.goto(homework, {waitUntil: 'networkidle2'});
