@@ -15,14 +15,15 @@ const puppeteer = require('puppeteer-core');
 
   const browser = await puppeteer.launch({
     executablePath: exec,
+    // headless: false
   });
 
   const page = await browser.newPage();
 
   // Ask questions
   var classURL = await askQuestion("Paste the url of your class (e.g. https://artofproblemsolving.com/class/2156-calculus)\n");
-  if(classURL.slice(-1) == "/")
-    classURL = classURL.slice(0, -1);
+  var className = classURL.split("/")[4];
+  classURL = `https://artofproblemsolving.com/class/${className}`
   await page.goto(classURL, {waitUntil: 'networkidle0'});
   var saveTranscripts = await askQuestion("Save transcripts? (yes/no)\n");
   var saveHomework = await askQuestion("Save homework? (yes/no)\n");
