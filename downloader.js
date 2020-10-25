@@ -15,7 +15,6 @@ const puppeteer = require('puppeteer-core');
 
   const browser = await puppeteer.launch({
     executablePath: exec,
-    headless: false
   });
 
   const page = await browser.newPage();
