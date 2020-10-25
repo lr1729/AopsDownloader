@@ -1,11 +1,11 @@
 # AopsDownloader
 
-Downloads transcripts and homework of aops classes
+Downloads transcripts and homework of AoPS classes
 
-How to run:
-Clone this repository and run `npm install`. Run with `node .`
+#How to run:
+Clone this repository and run `npm install`. Run with `node downloader.js`
 
-How to build:
+#How to build:
 Install https://github.com/vercel/pkg
 run ./build.sh
 
