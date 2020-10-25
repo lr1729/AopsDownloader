@@ -20,29 +20,29 @@ const puppeteer = require('puppeteer-core');
   const page = await browser.newPage();
 
   // Ask questions
-  var classURL = await askQuestion("Paste the url of your class (e.g. https://artofproblemsolving.com/class/2156-calculus) ");
+  var classURL = await askQuestion("Paste the url of your class (e.g. https://artofproblemsolving.com/class/2156-calculus)\n");
   if(classURL.slice(-1) == "/")
     classURL = classURL.slice(0, -1);
   await page.goto(classURL, {waitUntil: 'networkidle2'});
-  var saveTranscripts = await askQuestion("Save transcripts? (yes/no) ");
+  var saveTranscripts = await askQuestion("Save transcripts? (yes/no)\n");
   if(saveTranscripts == "yes")
-  var transcriptURL = await askQuestion("Paste the url of the first week's transcript (e.g. https://artofproblemsolving.com/class/2156-calculus/transcript/31402) ");
-  var saveHomework = await askQuestion("Save homework? (yes/no) ");
-  var weeks = await askQuestion("How many weeks to save? ");
+  var transcriptURL = await askQuestion("Paste the url of the first week's transcript (e.g. https://artofproblemsolving.com/class/2156-calculus/transcript/31402)\n");
+  var saveHomework = await askQuestion("Save homework? (yes/no)\n");
+  var weeks = await askQuestion("How many weeks to save?\n");
 
   // Login
-  var username = await askQuestion("Enter your username ");
+  var username = await askQuestion("Enter your username\n");
   await page.type('#login-username', username);
-  var password = await askQuestion("Enter your password ");
+  var password = await askQuestion("Enter your password\n");
   await page.type('#login-password', password);
   await page.click('#login-button');
   await sleep(1000);
   while(await page.evaluate('document.querySelector(".error")') !== null && await page.evaluate('document.querySelector(".error").getAttribute("style") !== null')){
     console.log("Login failed");
-    var username = await askQuestion("Please enter your username ");
+    var username = await askQuestion("Please enter your username\n");
     await page.click('#login-username', {clickCount: 3})
     await page.type('#login-username', username);
-    var password = await askQuestion("Please enter your password ");
+    var password = await askQuestion("Please enter your password\n");
     await page.click('#login-password', {clickCount: 3})
     await page.type('#login-password', password);
     await page.click('#login-button');
