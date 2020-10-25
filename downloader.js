@@ -51,7 +51,7 @@ const puppeteer = require('puppeteer-core');
   if(saveHomework == "yes"){
     console.log("Saving homework");
     for(let i = 1; i < parseInt(weeks) + 1; i++){
-      let homework = classURL + '/homework/${i}'
+      let homework = classURL + `/homework/${i}`
       console.log(`Loading homework for week ${i}`);
       await page.goto(homework, {waitUntil: 'networkidle2'});
       console.log(`Saving homework for week ${i}`);
