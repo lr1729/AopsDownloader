@@ -10,7 +10,7 @@ const puppeteer = require('puppeteer-core');
   const tmp = os.tmpdir();
 
   const exec = await download({
-    revision: 694644,
+    revision: 800071,
     installPath: `${tmp}/.local-chromium`})
 
   const browser = await puppeteer.launch({
@@ -36,6 +36,7 @@ const puppeteer = require('puppeteer-core');
   await page.type('#login-password', password);
   await page.click('#login-button');
   await waitForNetworkIdle(page, 500, 0);
+  await sleep(1000);
   while(await page.evaluate('document.querySelector(".error")') !== null && await page.evaluate('document.querySelector(".error").getAttribute("style") !== null')){
     console.log("Login failed");
     var username = await askQuestion("Please enter your username\n");
@@ -46,9 +47,9 @@ const puppeteer = require('puppeteer-core');
     await page.type('#login-password', password);
     await page.click('#login-button');
     await waitForNetworkIdle(page, 500, 0);
+    await sleep(1000);
   }
 
-  await sleep(1000);
   console.log("Logged in successfully");
   await sleep(2000);
 
