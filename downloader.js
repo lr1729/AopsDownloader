@@ -1,4 +1,5 @@
 const readline = require('readline');
+var readlineSync = require('readline-sync');
 const puppeteer = require('puppeteer-core');
 
 (async () => {
@@ -28,11 +29,13 @@ const puppeteer = require('puppeteer-core');
   var saveTranscripts = await askQuestion("Save transcripts? (yes/no)\n");
   var saveHomework = await askQuestion("Save homework? (yes/no)\n");
   var weeks = await askQuestion("How many weeks to save?\n");
+  var username = await askQuestion("Enter your username\n");
+  var password = readlineSync.question("Enter your password\n", {
+    hideEchoBack: true
+  });
 
   // Login
-  var username = await askQuestion("Enter your username\n");
   await page.type('#login-username', username);
-  var password = await askQuestion("Enter your password\n");
   await page.type('#login-password', password);
   await page.click('#login-button');
   await waitForNetworkIdle(page, 500, 0);
@@ -42,7 +45,9 @@ const puppeteer = require('puppeteer-core');
     var username = await askQuestion("Please enter your username\n");
     await page.click('#login-username', {clickCount: 3})
     await page.type('#login-username', username);
-    var password = await askQuestion("Please enter your password\n");
+    var password = readlineSync.question("Enter your password\n", {
+      hideEchoBack: true
+    });
     await page.click('#login-password', {clickCount: 3})
     await page.type('#login-password', password);
     await page.click('#login-button');
