@@ -38,8 +38,10 @@ const puppeteer = require('puppeteer-core');
   await page.type('#login-username', username);
   await page.type('#login-password', password);
   await page.click('#login-button');
-  await waitForNetworkIdle(page, 500, 0);
+  await waitForNetworkIdle(page, 1000, 0);
   await sleep(1000);
+
+  // Retry if login fails
   while(await page.evaluate('document.querySelector(".error")') !== null && await page.evaluate('document.querySelector(".error").getAttribute("style") !== null')){
     console.log("Login failed");
     var username = await askQuestion("Please enter your username\n");
@@ -51,7 +53,7 @@ const puppeteer = require('puppeteer-core');
     await page.click('#login-password', {clickCount: 3})
     await page.type('#login-password', password);
     await page.click('#login-button');
-    await waitForNetworkIdle(page, 500, 0);
+    await waitForNetworkIdle(page, 1000, 0);
     await sleep(1000);
   }
 
